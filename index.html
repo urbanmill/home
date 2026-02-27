@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Urban Mill — Loose Leaf Serenity Subscription</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Simple icon set (for social/cart/user) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --text:#0e1720;
+      --muted:#6b7280;
+
+      /* matcha green theme */
+      --nav:#5B843D;      /* matcha green darker */
+      --nav2:#4E7433;     /* two shades darker */
+      --line:rgba(255,255,255,.18);
+      --panel:#ffffff;    /* pure white panel */
+      --btn:#0b2a3b;
+      --btnText:#ffffff;
+
+      --light:#faf9f8;
+      --gold:#d4af37;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      font-family:'Inter',sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+    h1,h2,h3{
+      font-family:'Playfair Display',serif;
+      font-weight:700;
+      letter-spacing:.02em;
+    }
+    .container{max-width:1400px;margin:0 auto;padding:0 5vw;}
+
+    /* ======= HEADER (matches screenshot) ======= */
+    header{
+      position:fixed;
+      top:0;left:0;right:0;
+      z-index:100;
+      background:var(--nav);
+      color:#fff;
+      box-shadow:0 8px 24px rgba(0,0,0,.12);
+    }
+
+    .topbar{
+      display:grid;
+      grid-template-columns:1fr auto 1fr;
+      align-items:center;
+      gap:1rem;
+      padding:.9rem 5vw;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(0deg,var(--nav2),var(--nav));
+    }
+
+    .social{
+      display:flex;
+      gap:.9rem;
+      align-items:center;
+      opacity:.95;
+    }
+    .social a{
+      color:#fff;
+      text-decoration:none;
+      font-size:1.05rem;
+      opacity:.9;
+      transition:opacity .2s ease, transform .2s ease;
+    }
+    .social a:hover{opacity:1;transform:translateY(-1px);}
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:.55rem;
+      justify-content:center;
+      font-family:'Playfair Display',serif;
+      font-size:1.35rem;
+      letter-spacing:.02em;
+      white-space:nowrap;
+    }
+    .brand .mark{
+      font-size:1.05rem;
+      opacity:.95;
+    }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:1.25rem;
+    }
+
+    .login-link{
+      color:#fff;
+      text-decoration:none;
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+      opacity:.92;
+      font-size:.95rem;
+    }
+    .login-link:hover{opacity:1;}
+
+    .cart-icon{
+      position:relative;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:.45rem;
+      color:#fff;
+      opacity:.95;
+      user-select:none;
+    }
+    .cart-icon i{font-size:1.05rem;}
+    .cart-icon::after{
+      content:attr(data-count);
+      position:absolute;
+      top:-10px;
+      right:-12px;
+      background:var(--gold);
+      color:#1b1b1b;
+      font-weight:700;
+      font-size:.75rem;
+      padding:.15rem .4rem;
+      border-radius:999px;
+      display:none;
+      border:1px solid rgba(0,0,0,.15);
+    }
+    .cart-icon[data-count]:not([data-count="0"])::after{display:block;}
+
+    .menubar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:.65rem 5vw;
+      border-bottom:1px solid var(--line);
+      background:var(--nav);
+    }
+    .menu-links{
+      width:100%;
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:0;
+    }
+    .menu-links a{
+      color:#fff;
+      text-decoration:none;
+      font-size:.85rem;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      text-align:center;
+      padding:.35rem .25rem;
+      border-right:1px solid var(--line);
+      opacity:.92;
+      transition:opacity .2s ease, background .2s ease;
+    }
+    .menu-links a:last-child{border-right:none;}
+    .menu-links a:hover{opacity:1;background:rgba(255,255,255,.06);}
+
+    .hamburger{
+      display:none;
+      color:#fff;
+      font-size:1.6rem;
+      cursor:pointer;
+      user-select:none;
+    }
+
+    /* ======= HERO SPLIT ======= */
+    .hero{
+      /* account for fixed header */
+      padding-top:126px; /* adjusted in JS-free way; works with current header height */
+      min-height:100vh;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+    }
+
+    .hero-left{
+      position:relative;
+      background:rgba(255,253,245,0.85);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      /* shrink both sides by ~20px */
+      padding:5rem calc(4.5vw - 20px) 5rem calc(4.5vw - 20px);
+    }
+
+    .hero-copy{
+      max-width:520px;
+    }
+    .hero-kicker{
+      font-size:.8rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:rgba(14,23,32,.72);
+      margin-bottom:1.5rem;
+    }
+    .hero-title{
+      font-size:clamp(3.2rem, 6vw, 5.4rem);
+      line-height:.92;
+      margin-bottom:1.75rem;
+      color:#0c1f2d;
+    }
+    .hero-sub{
+      color:rgba(14,23,32,.75);
+      max-width:420px;
+      font-size:1rem;
+      margin-bottom:2.2rem;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:.95rem 2.5rem;
+      background:var(--btn);
+      color:var(--btnText);
+      text-decoration:none;
+      font-weight:500;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      border:1px solid rgba(255,255,255,.15);
+      transition:transform .2s ease, filter .2s ease;
+      cursor:pointer;
+    }
+    .btn:hover{transform:translateY(-2px);filter:brightness(1.05);}
+
+    .hero-right{
+      position:relative;
+      overflow:hidden;
+      background:#dde6ea;
+    }
+    .hero-right::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        url("1000024265.jpg")
+        center/cover no-repeat;
+      transform:scale(1.02);
+      opacity:.75;
+      transition:transform .1s ease-out;
+    }
+
+    /* Optional little “badge” like screenshot */
+    .hero-badge{
+      position:absolute;
+      right:2.2rem;
+      bottom:2.2rem;
+      width:120px;
+      height:120px;
+      background:var(--nav);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:1rem;
+      font-size:.8rem;
+      line-height:1.15;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      clip-path:polygon(30% 0, 70% 0, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0 70%, 0 30%);
+      box-shadow:0 12px 30px rgba(0,0,0,.18);
+      opacity:.95;
+      transform: rotate(30deg);
+    }
+
+    /* ======= SECTIONS (keep your content, but spacing adjusted) ======= */
+    main{
+      background:rgba(255,253,245,0.85);
+    }
+    main section{
+      padding:7rem 0 6rem;
+      opacity:0;
+      transform:translateY(24px);
+      transition:all 1s ease-out;
+    }
+    main section.visible{opacity:1;transform:translateY(0);}
+
+    #plans{padding-top:10rem;}
+
+    .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:2.25rem;}
+    .plan-card{
+      background:var(--light);
+      padding:3rem 2rem;
+      text-align:center;
+      border:1px solid rgba(0,0,0,0.06);
+      transition:transform .35s ease, box-shadow .35s ease;
+    }
+    .plan-card:hover{transform:translateY(-10px);box-shadow:0 18px 40px rgba(0,0,0,.08);}
+    .plan-card h3{font-size:2rem;margin-bottom:1rem;}
+    .plan-card .price{font-size:2.8rem;font-weight:600;margin:1rem 0;}
+    .popular{border:2px solid var(--gold);position:relative;}
+    .popular::after{
+      content:"Most Popular";
+      position:absolute;
+      top:-15px;left:50%;
+      transform:translateX(-50%);
+      background:var(--gold);
+      color:#1b1b1b;
+      font-weight:700;
+      padding:.5rem 1.3rem;
+      font-size:.85rem;
+      border-radius:999px;
+    }
+
+    .showcase{display:flex;justify-content:center;align-items:center;width:100%;padding:0 5vw;gap:2rem;}
+    .showcase img{width:48%;height:620px;object-fit:cover;border-radius:6px;}
+    /* no fade, both images remain visible */
+
+    #showcase{padding-top:8rem;padding-bottom:2rem;border-top:1px solid rgba(0,0,0,0.08);}
+
+    footer{
+      background:var(--light);
+      padding:5rem 0 3rem;
+      text-align:center;
+      border-top:1px solid rgba(0,0,0,0.05);
+    }
+    .newsletter{max-width:520px;margin:0 auto 3rem;}
+    .newsletter input{
+      width:100%;
+      padding:1rem;
+      margin:.75rem 0 1rem;
+      border:1px solid #ddd;
+      font-size:1rem;
+    }
+
+    /* Cart Modal */
+    .modal{
+      display:none;
+      position:fixed;
+      z-index:200;
+      left:0;top:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,0.5);
+      align-items:center;
+      justify-content:center;
+    }
+    .modal-content{
+      background:white;
+      padding:2.25rem;
+      max-width:620px;
+      width:92%;
+      border-radius:10px;
+      position:relative;
+    }
+    .close{position:absolute;top:1rem;right:1.25rem;font-size:2rem;cursor:pointer;}
+    .cart-item{display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem;gap:1rem;}
+    .cart-total{font-weight:700;margin-top:1.6rem;text-align:right;}
+    .remove-item{color:var(--muted);cursor:pointer;margin-left:1rem;font-size:1.2rem;}
+
+    /* ======= MOBILE ======= */
+    @media (max-width: 980px){
+      .menu-links{grid-template-columns:repeat(3,1fr);row-gap:.25rem;}
+      .menu-links a:nth-child(3){border-right:none;}
+      .menu-links a:nth-child(4), .menu-links a:nth-child(5){
+        grid-column:span 1;
+      }
+      .hero{grid-template-columns:1fr; padding-top:126px;}
+      .hero-right{min-height:52vh;}
+      .hero-badge{left:1.25rem;bottom:1.25rem;transform:scale(.95) rotate(20deg);}
+    }
+    @media (max-width: 600px){
+      .topbar{grid-template-columns:auto 1fr auto;}
+      .brand{justify-content:center;}
+      .social{display:none;}
+      .menu-links{grid-template-columns:1fr;}
+      .menu-links a{border-right:none;border-bottom:1px solid var(--line);}
+      .menu-links a:last-child{border-bottom:none;}
+      .hero-left{padding:3.5rem 7vw;}
+      .hero-sub{font-size:.98rem;}
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="topbar">
+      <div class="social" aria-label="Social links">
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="Pinterest"><i class="fa-brands fa-pinterest-p"></i></a>
+      </div>
+
+      <div class="brand" aria-label="Brand">
+        <span class="mark"><i class="fa-solid fa-seedling"></i></span>
+        <span>Urban Mill</span>
+      </div>
+
+      <div class="actions">
+        <div class="cart-icon" id="cart-icon" data-count="0" aria-label="Cart">
+          <i class="fa-solid fa-bag-shopping"></i>
+        </div>
+        <a class="login-link" href="#" aria-label="Log in">
+          <i class="fa-regular fa-user"></i>
+          <span>Log In</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="menubar">
+      <div class="menu-links" id="nav-menu">
+        <a href="#showcase" class="smooth-scroll">Teas</a>
+        <a href="#plans" class="smooth-scroll">Extras</a>
+        <a href="#">About</a>
+        <a href="#">Blog</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SPLIT -->
+  <section class="hero" aria-label="Hero">
+    <div class="hero-left">
+      <div class="hero-copy">
+        <div class="hero-kicker">It's always</div>
+        <h1 class="hero-title">Tea<br/>Time</h1>
+        <p class="hero-sub">
+          This is a space to welcome visitors to your site. Grab their attention with copy that clearly states what you offer.
+        </p>
+        <a href="#plans" class="btn smooth-scroll">Shop Now</a>
+      </div>
+      <div class="hero-badge">With<br/>Urban Mill<br/>Herbal Tea</div>
+    </div>
+
+    <div class="hero-right" role="img" aria-label="Tea preparation image">
+    </div>
+  </section>
+
+  <main>
+    <section id="plans" class="container">
+      <h2 style="text-align:center; font-size:3rem; margin-bottom:3rem;">Choose Your Ritual</h2>
+      <div class="plans">
+        <div class="plan-card" data-plan="essentials" data-price="28" data-stripe-price-id="price_1YourEssentialsPriceID">
+          <h3>Essentials</h3>
+          <div class="price">$28</div>
+          <p>4 curated teas/month<br>Fresh small-batch<br>Free shipping</p>
+          <br>
+          <button class="btn add-to-cart" style="background:transparent;color:var(--text);border:1px solid rgba(14,23,32,.25);">
+            Add to Cart
+          </button>
+        </div>
+
+        <div class="plan-card popular" data-plan="curated" data-price="42" data-stripe-price-id="price_1YourCuratedPriceID">
+          <h3>Curated</h3>
+          <div class="price">$42</div>
+          <p>6 teas + surprise seasonal<br>Priority access<br>Eco-packaging</p>
+          <br>
+          <button class="btn add-to-cart" style="background:var(--gold);border:none;color:#1b1b1b;font-weight:700;">
+            Add to Cart
+          </button>
+        </div>
+
+        <div class="plan-card" data-plan="ritual" data-price="65" data-stripe-price-id="price_1YourRitualPriceID">
+          <h3>Ritual</h3>
+          <div class="price">$65</div>
+          <p>8 teas + infuser/glass<br>Personal note<br>Monthly extras</p>
+          <br>
+          <button class="btn add-to-cart" style="background:transparent;color:var(--text);border:1px solid rgba(14,23,32,.25);">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="showcase" class="container">
+      <h2 style="text-align:center; font-size:3rem; margin-bottom:3rem;">Awaken the Leaves</h2>
+      <div class="showcase">
+        <img src="1000024262.png" alt="Tea ritual variant">
+        <img src="1000024264.jpg" alt="Tea ritual">
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="newsletter">
+      <h3 style="font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:.5rem;">Join the Calm</h3>
+      <p style="color:var(--muted);margin-bottom:1rem;">Monthly serenity straight to your inbox + exclusive offers on new tea blends</p>
+
+      <div id="mc_embed_signup">
+        <form action="https://youraccount.us21.list-manage.com/subscribe/post?u=yourid&amp;id=youraudienceid&amp;f_id=00e5e3e5f0"
+              method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
+          <div id="mc_embed_signup_scroll">
+            <div class="mc-field-group" style="text-align:left;">
+              <label for="mce-EMAIL" style="display:block;margin-bottom:.35rem;">Email Address <span class="asterisk">*</span></label>
+              <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required value="">
+            </div>
+            <div hidden><input type="hidden" name="tags" value="yourtags"></div>
+            <div class="clear">
+              <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="btn" value="Subscribe" style="border:none;">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <p style="color:var(--muted);">© 2026 Urban Mill Tea | Chesapeake, VA | Crafted with intention</p>
+  </footer>
+
+  <!-- Cart Modal -->
+  <div id="cart-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 style="font-family:'Playfair Display',serif;margin-bottom:1rem;">Your Cart</h2>
+      <div id="cart-items"></div>
+      <div class="cart-total" id="cart-total">Total: $0</div>
+      <button id="checkout-btn" class="btn" style="width:100%; margin-top:1.4rem; border:none; background:var(--btn);">
+        Checkout with Stripe
+      </button>
+    </div>
+  </div>
+
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    const stripe = Stripe('pk_test_YourPublishableKey'); // Replace
+
+    // Smooth scrolling
+    document.querySelectorAll('.smooth-scroll, a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (!href || !href.startsWith('#')) return;
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // Fade-in sections (only main sections, not hero)
+    const sections = document.querySelectorAll('main section');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+    sections.forEach(section => observer.observe(section));
+
+    // Parallax scroll effect for hero image
+    const heroRightEl = document.querySelector('.hero-right');
+    window.addEventListener('scroll', () => {
+      if (heroRightEl) {
+        const scrollY = window.scrollY;
+        const parallaxValue = scrollY * 0.3;
+        heroRightEl.style.transform = `translateY(${parallaxValue}px)`;
+      }
+    });
+
+    // Cart Functionality
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartIcon = document.getElementById('cart-icon');
+    const cartModal = document.getElementById('cart-modal');
+    const cartItemsEl = document.getElementById('cart-items');
+    const cartTotalEl = document.getElementById('cart-total');
+    const closeModal = document.querySelector('.close');
+    const checkoutBtn = document.getElementById('checkout-btn');
+
+    function updateCart() {
+      localStorage.setItem('cart', JSON.stringify(cart));
+      cartIcon.setAttribute('data-count', String(cart.length));
+      renderCartItems();
+    }
+
+    function renderCartItems() {
+      cartItemsEl.innerHTML = '';
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        const itemEl = document.createElement('div');
+        itemEl.classList.add('cart-item');
+        itemEl.innerHTML = `
+          <span>${item.name} — $${item.price}/month</span>
+          <span class="remove-item" data-index="${index}" aria-label="Remove item">&times;</span>
+        `;
+        cartItemsEl.appendChild(itemEl);
+        total += Number(item.price || 0);
+      });
+
+      cartTotalEl.textContent = `Total: $${total}`;
+
+      document.querySelectorAll('.remove-item').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const index = Number(e.target.dataset.index);
+          cart.splice(index, 1);
+          updateCart();
+        });
+      });
+    }
+
+    document.querySelectorAll('.add-to-cart').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.plan-card');
+        const item = {
+          name: card.dataset.plan.charAt(0).toUpperCase() + card.dataset.plan.slice(1),
+          price: parseInt(card.dataset.price, 10),
+          stripePriceId: card.dataset.stripePriceId
+        };
+        cart.push(item);
+        updateCart();
+        alert('Added to cart!');
+      });
+    });
+
+    cartIcon.addEventListener('click', () => cartModal.style.display = 'flex');
+    closeModal.addEventListener('click', () => cartModal.style.display = 'none');
+    window.addEventListener('click', (e) => { if (e.target === cartModal) cartModal.style.display = 'none'; });
+
+    updateCart();
+
+    // Stripe Checkout
+    checkoutBtn.addEventListener('click', async () => {
+      if (cart.length === 0) return alert('Cart is empty');
+
+      const response = await fetch('/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: cart })
+      });
+
+      const { id } = await response.json();
+      stripe.redirectToCheckout({ sessionId: id });
+    });
+  </script>
+
+</body>
+</html>
